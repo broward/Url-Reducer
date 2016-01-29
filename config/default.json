@@ -1,0 +1,26 @@
+{
+    "environment": "default",
+    "app": {
+        "port": 3000,
+        "testport": 3001,
+        "protocol": "http",
+        "host": "localhost",
+        "timeoutMS": 24000,
+        "seed": true,
+        "clusterid": "X"
+    },
+
+    "couchbase": {
+        "host": "ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091",
+        "bucket": "default",
+        "user": "Administrator",
+        "ttl": 86400
+    },
+
+    "seedbase": {
+        "host": "ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091",
+        "bucket": "seed",
+        "user": "Administrator",
+        "ttl": 86400
+    }
+}
