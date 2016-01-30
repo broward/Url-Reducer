@@ -116,8 +116,9 @@ describe("NUR Test Suite", function() {
 
         it("test findKeys", function(done) {
             cb.methods.findKeys('www.bing.com', function(err, result) {
-                console.log('err=' + err);
-                // console.log('reesult=' + JSON.stringify(result));
+            	assert(true, err === null);
+   				should.exist(result);
+   				assert(true, result.length > 0);
                 done();
             });
         });
