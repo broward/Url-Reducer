@@ -1,3 +1,5 @@
+'use strict';
+
 var config = require('config');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -85,15 +87,16 @@ var seedBucket = cluster.openBucket(config.seedbase.bucket, function(err) {
 /** 
  *  increment base-36 value for new url
  **/
-var keyIncrementer = function() {
+var keyIncrementer = function(callback) {
     var nextUrl = bases.fromBase32(currentUrl);
     nextUrl = parseFloat(nextUrl) + 1;
     currentUrl = bases.toBase32(nextUrl + '');
+    callback(config.app.clusterid + currentUrl);
 
     // save latest generated key in case server crashes
+    // okay if this is an async process, it's not used in the app
     seedWrite(currentUrl, function() {
         console.log('saving currenturl value: ' + currentUrl);
-        return config.app.clusterid + currentUrl;
     });
 }
 
@@ -220,12 +223,9 @@ var urlWrite = function(key, url, callback) {
 
     // no key, generate the next url here
     if (myKey) {} else {
-        myKey = keyIncrementer(); // save our incremented key in global variable
-    }
-
-    // couchbase key is limited to 250 chars
-    if (myKey.length > 250) {
-        callback("the key " + myKey + " is too long, max of 250 chars");
+        keyIncrementer(function(result) {
+            myKey = result
+        }); // save our incremented key in global variable
     }
 
     // don't allow duplicate entries
@@ -302,7 +302,7 @@ var findKeys = function(url, callback) {
         if (err) {
             return callback(err);
         }
-        for (i in results)
+        for (var i in results)
             if (results[i].key.indexOf(url) > -1) {
                 matches.push(results[i]);
             }
@@ -316,6 +316,14 @@ var findKeys = function(url, callback) {
  *  REST call to read a entry from couchbase
  **/
 app.get('/configuration', function(req, res, next) {
+    res.send(configuration());
+});
+
+
+/**
+* system configuration info
+**/
+var configuration = function() {
     var process = require('process');
 
     var result = "Configuration:<br>";
@@ -335,8 +343,9 @@ app.get('/configuration', function(req, res, next) {
     for (var key in config.seedbase) {
         result = result + key + " = " + config.seedbase[key] + "<br>";
     }
-    res.send(result);
-});
+
+    return result;
+}
 
 
 /**
@@ -354,7 +363,14 @@ seedRead(function(err, value) {
 
 
 module.exports = app;
-module.exports.cache = {
-    read: urlRead,
-    write: urlWrite
+module.exports.methods = {
+    couchbase: couchbase,
+    urlRead: urlRead,
+    urlWrite: urlWrite,
+    formatUrl: formatUrl,
+    seedRead: seedRead,
+    seedWrite: seedWrite,
+    findKeys: findKeys,
+    keyIncrementer: keyIncrementer,
+    configuration: configuration
 };

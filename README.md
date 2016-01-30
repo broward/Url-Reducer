@@ -29,3 +29,5 @@ http://nintex.herokuapp.com/read?key=myKey
 http://nintex.herokuapp.com/write?key=myKey&url=www.google.com
 http://nintex.herokuapp.com/findKeys?url=www.google.com
 
+Testing - run "npm test" in root directory
+
