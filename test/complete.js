@@ -10,10 +10,10 @@ function makeUrl() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for (var i = 0; i < 15; i++)
+    for (var i = 0; i < 10; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return text;
+    return 'TEST' + text;
 }
 
 describe("NUR Test Suite", function() {
@@ -96,7 +96,7 @@ describe("NUR Test Suite", function() {
         });
 
         it("test read method", function(done) {
-            cb.methods.urlRead('xyz', function(err, value) {
+            cb.methods.urlRead(randomUrl, function(err, value) {
                 assert(true, err === null);
                 should.exist(value);
                 assert(true, value.toString().indexOf('reduced url') > -1);
