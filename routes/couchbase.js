@@ -23,6 +23,7 @@ var bucket = cluster.openBucket(config.couchbase.bucket, function(err) {
         console.log(err);
     } else {
         bucket.operationTimeout = 60 * 1000;
+        console.log("Connected to host:" + config.couchbase.host);
         console.log('Connected to Couchbase bucket: ' + config.couchbase.bucket);
     }
 });
@@ -295,13 +296,13 @@ app.get('/findKeys', function(req, res, next) {
  **/
 var findKeys = function(url, callback) {
     var N1qlQuery = require('couchbase').N1qlQuery;
-    var param = '%' + url + '%';
-    var query = N1qlQuery.fromString("SELECT Meta().id, * FROM default WHERE url LIKE '" + param + "';");
+    var query = N1qlQuery.fromString("SELECT meta().id FROM `default` where url like '%" + url + "%' ;");
     bucket.query(query, function(err, matches) {
         if (err) {
             return callback(err);
+        } else {
+            return callback(null, matches);
         }
-        return callback(null, matches);
     });
 
     /* var matches = [];
