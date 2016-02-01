@@ -7,7 +7,7 @@ set -e
 
 
 #Set up the default options:
-REINSTALL="false"
+REINSTALL="true"
 SHOWCOVERAGE="true"
 
 
