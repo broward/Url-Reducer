@@ -294,8 +294,17 @@ app.get('/findKeys', function(req, res, next) {
  *     Find the records which redirect to a selected url
  **/
 var findKeys = function(url, callback) {
+    var N1qlQuery = require('couchbase').N1qlQuery;
+    var param = '%' + url + '%';
+    var query = N1qlQuery.fromString("SELECT Meta().id, * FROM default WHERE url LIKE '" + param + "';");
+    bucket.query(query, function(err, matches) {
+        if (err) {
+            return callback(err);
+        }
+        return callback(null, matches);
+    });
 
-    var matches = [];
+    /* var matches = [];
     var ViewQuery = couchbase.ViewQuery;
     var query = ViewQuery.from('dev_nintex', 'findkeys');
     bucket.query(query, function(err, results) {
@@ -308,7 +317,7 @@ var findKeys = function(url, callback) {
             }
 
         return callback(null, matches);
-    });
+    }); */
 }
 
 
@@ -321,8 +330,8 @@ app.get('/configuration', function(req, res, next) {
 
 
 /**
-* system configuration info
-**/
+ * system configuration info
+ **/
 var configuration = function() {
     var process = require('process');
 
