@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var assert = require('assert');
 var p = require('../package.json');
 var cb = require('../routes/couchbase.js');
+var supertest = require('supertest');
 
 var config = require('config');
 
@@ -116,9 +117,10 @@ describe("NUR Test Suite", function() {
 
         it("test findKeys", function(done) {
             cb.methods.findKeys('www.bing.com', function(err, result) {
-            	assert(true, err === null);
-   				should.exist(result);
-   				assert(true, result.length > 0);
+                assert(true, err === null);
+                should.exist(result);
+                console.log("result size = " + result.length);
+                assert(true, result.length > 0);
                 done();
             });
         });
@@ -128,6 +130,46 @@ describe("NUR Test Suite", function() {
             should.exist(info);
             assert(true, info.indexOf('NODE_ENV') > -1);
             done();
+        });
+    });
+
+    // Test REST API now that we have test data
+    describe("REST API Suite", function() {
+
+         it("Test Input Form", function(done) {
+            supertest(cb)
+                .post('/input')
+                .expect(200, done);
+        });
+
+        it("Test Seed API", function(done) {
+            supertest(cb)
+                .get('/seed')
+                .expect(200, done);
+        });
+
+        it("Test Read API", function(done) {
+            supertest(cb)
+                .get('/read?key=' + randomUrl)
+                .expect(200, done);
+        });
+
+        it("Test Write API", function(done) {
+            supertest(cb)
+                .get('/write?url=' + randomUrl)
+                .expect(200, done);
+        });
+
+        it("Test FindKeys API", function(done) {
+            supertest(cb)
+                .get('/findKeys?url=bing')
+                .expect(200, done);
+        });
+
+        it("Test Url Redirect API", function(done) {
+            supertest(cb)
+                .get('/url/' + randomUrl)
+                .expect(302, done);
         });
     });
 
