@@ -10,25 +10,15 @@
         "clusterid": "X"
     },
 
-    "rest": {
-        "seed": "/seed",
-        "read": "/read",
-        "write": "/write",
-        "findKeys": "/findKeys",
-        "input": "/input",
-        "url": "/url/*",
-        "config": "/config"
-    },
-
     "couchbase": {
-        "host": "ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091",
+        "host": "localhost:8091",
         "bucket": "default",
         "user": "Administrator",
         "ttl": 86400
     },
 
     "seedbase": {
-        "host": "ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091",
+        "host": "localhost:8091",
         "bucket": "seed",
         "user": "Administrator",
         "ttl": 86400

@@ -55,7 +55,7 @@ var formatUrl = function(url) {
 /**
  *     Accept user's inpput of url and custom url
  **/
-app.post('/input', function(req, res) {
+app.post(config.rest.input, function(req, res) {
     var url = req.body.url;
     var customUrl = req.body.customUrl;
     var html = '';
@@ -105,7 +105,7 @@ var keyIncrementer = function(callback) {
 /**
  *  REST call to read current seed key
  **/
-app.get('/seed', function(req, res, next) {
+app.get(config.rest.seed, function(req, res, next) {
     seedRead(function(err, val) {
         if (err) {
             res.send(err);
@@ -167,7 +167,7 @@ var seedWrite = function(value, callback) {
 /**
  *  REST call to read a entry from couchbase
  **/
-app.get('/read', function(req, res, next) {
+app.get(config.rest.read, function(req, res, next) {
     urlRead(req.query.key, function(err, val) {
         if (err) {
             res.send(err);
@@ -200,7 +200,7 @@ var urlRead = function(key, callback) {
 /**
  *  REST call to write entry to couchbase
  **/
-app.get('/write', function(req, res, next) {
+app.get(config.rest.write, function(req, res, next) {
     urlWrite(req.query.key, req.query.url, function(err, val) {
         if (err) {
             res.send(err);
@@ -259,7 +259,7 @@ var urlWrite = function(key, url, callback) {
 /**
  *    Do my redirection
  **/
-app.get('/url/*', function(req, res, next) {
+app.get(config.rest.url, function(req, res, next) {
 
     var myKey = req.url.substring(5, req.url.length);
 
@@ -279,7 +279,7 @@ app.get('/url/*', function(req, res, next) {
 /**
  *    Find set of original urls
  **/
-app.get('/findKeys', function(req, res, next) {
+app.get(config.rest.findKeys, function(req, res, next) {
 
     findKeys(req.query.url, function(err, val) {
         if (err) {
@@ -325,7 +325,7 @@ var findKeys = function(url, callback) {
 /**
  *  REST call to read a entry from couchbase
  **/
-app.get('/configuration', function(req, res, next) {
+app.get(config.rest.config, function(req, res, next) {
     res.send(configuration());
 });
 
@@ -375,6 +375,7 @@ seedRead(function(err, value) {
 module.exports = app;
 module.exports.methods = {
     couchbase: couchbase,
+    bucket: bucket,
     urlRead: urlRead,
     urlWrite: urlWrite,
     formatUrl: formatUrl,

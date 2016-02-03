@@ -4,9 +4,9 @@ var assert = require('assert');
 var p = require('../package.json');
 var cb = require('../routes/couchbase.js');
 var supertest = require('supertest');
-
 var config = require('config');
 
+// generate a random reduce url
 function makeUrl() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -21,7 +21,8 @@ describe("NUR Test Suite", function() {
 
     // set higher timeout to give SQL server connection time to complete
 
-    var randomUrl = makeUrl();
+    var reduceUrl = makeUrl();
+    var redirectUrl = 'www.bing.com';
 
     // iniialize command line arguments
     before(function(done) {
@@ -44,20 +45,27 @@ describe("NUR Test Suite", function() {
     describe("Couchbase Suite", function() {
 
         it("test formatUrl method", function(done) {
+
+            // should fail
+            var test = null;
+            cb.methods.formatUrl(test);
+            console.log(test);
+            assert(true, test === 'http://');
+
             // should add http://
-            var test = '';
+            test = '';
             cb.methods.formatUrl(test);
             assert(true, test === 'http://');
 
             // should do nothing
-            test = 'https://www.bing.com';
+            test = 'https://' + redirectUrl;
             cb.methods.formatUrl(test);
-            assert(true, test === 'https://www.bing.com');
+            assert(true, test === 'https://' + redirectUrl);
 
             // should do case-insensitive
-            test = 'HTTP://www.bing.com';
+            test = 'HTTP://' + redirectUrl;
             cb.methods.formatUrl(test);
-            assert(true, test === 'HTTP://www.bing.com');
+            assert(true, test === 'HTTP://' + redirectUrl);
 
             done();
         });
@@ -65,18 +73,17 @@ describe("NUR Test Suite", function() {
         it("test custom url write method", function(done) {
 
             // custom url should work
-            cb.methods.urlWrite(randomUrl, 'www.bing.com', function(err, message) {
+            cb.methods.urlWrite(reduceUrl, redirectUrl, function(err, message) {
                 assert(true, err === null);
                 should.exist(message);
-                console.log(message);
                 assert(true, message.indexOf('reduced url') > -1);
                 done();
             });
         });
 
-        // duplicate key should get an error
+        // re-using reduce key should get an error
         it("test duplicate custom write method", function(done) {
-            cb.methods.urlWrite(randomUrl, 'www.bing.com', function(err1, message) {
+            cb.methods.urlWrite(reduceUrl, redirectUrl, function(err1, message) {
                 assert(true, message === null);
                 should.exist(err1);
                 assert(true, err1.indexOf('already exists') > -1);
@@ -85,10 +92,8 @@ describe("NUR Test Suite", function() {
         });
 
         it("test generated url write method", function(done) {
-            // generated key should work
-            cb.methods.urlWrite('', 'www.bing.com', function(err, message) {
-                console.log('err=' + err);
-                console.log('message=' + message);
+            // generated key should always work
+            cb.methods.urlWrite('', redirectUrl, function(err, message) {
                 assert(true, err === null);
                 should.exist(message);
                 assert(true, message.indexOf('reduced url') > -1);
@@ -97,7 +102,7 @@ describe("NUR Test Suite", function() {
         });
 
         it("test read method", function(done) {
-            cb.methods.urlRead(randomUrl, function(err, value) {
+            cb.methods.urlRead(reduceUrl, function(err, value) {
                 assert(true, err === null);
                 should.exist(value);
                 assert(true, value.toString().indexOf('reduced url') > -1);
@@ -116,10 +121,9 @@ describe("NUR Test Suite", function() {
         });
 
         it("test findKeys", function(done) {
-            cb.methods.findKeys('www.bing.com', function(err, result) {
+            cb.methods.findKeys(redirectUrl, function(err, result) {
                 assert(true, err === null);
                 should.exist(result);
-                console.log("result size = " + result.length);
                 assert(true, result.length > 0);
                 done();
             });
@@ -136,27 +140,27 @@ describe("NUR Test Suite", function() {
     // Test REST API now that we have test data
     describe("REST API Suite", function() {
 
-         it("Test Input Form", function(done) {
+        it("Test Input Form", function(done) {
             supertest(cb)
-                .post('/input')
+                .post(config.rest.input)
                 .expect(200, done);
         });
 
         it("Test Seed API", function(done) {
             supertest(cb)
-                .get('/seed')
+                .get(config.rest.seed)
                 .expect(200, done);
         });
 
         it("Test Read API", function(done) {
             supertest(cb)
-                .get('/read?key=' + randomUrl)
+                .get('/read?key=' + reduceUrl)
                 .expect(200, done);
         });
 
         it("Test Write API", function(done) {
             supertest(cb)
-                .get('/write?url=' + randomUrl)
+                .get('/write?url=' + reduceUrl)
                 .expect(200, done);
         });
 
@@ -166,10 +170,26 @@ describe("NUR Test Suite", function() {
                 .expect(200, done);
         });
 
-        it("Test Url Redirect API", function(done) {
+        it("Test config", function(done) {
             supertest(cb)
-                .get('/url/' + randomUrl)
+                .get(config.rest.config)
+                .expect(200, done);
+        });
+
+        it("Test Url Redirect API", function(done) {
+            console.log(config.rest.url.substring(0, 5) + reduceUrl);
+            supertest(cb)
+                .get(config.rest.url.substring(0, 5) + reduceUrl)
                 .expect(302, done);
+        });
+    });
+
+    // remove test records
+    after(function(done) {
+        var N1qlQuery = require('couchbase').N1qlQuery;
+        var query = N1qlQuery.fromString("DELETE FROM `default` where meta().id like 'TEST%' ;");
+        cb.methods.bucket.query(query, function(err, matches) {
+            done();
         });
     });
 
