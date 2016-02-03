@@ -12,9 +12,8 @@
 
     "rest": {
         "seed": "/seed",
-        "read": "/read",
-        "write": "/write",
-        "findKeys": "/findKeys",
+        "reduce": "/reduce/:key",
+        "findKeys": "/findKeys/:key",
         "input": "/input",
         "url": "/url/*",
         "config": "/config"

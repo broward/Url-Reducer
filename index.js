@@ -35,18 +35,17 @@ app.get('/', function(req, res) {
 
         '<pre>http://nintex.herokuapp.com/url				to execute a reduced url</pre>' +
         '<pre>http://nintex.herokuapp.com/seed			initialize or diplay the current generated url</pre>' +
-        '<pre>http://nintex.herokuapp.com/read			read an existing url record</pre>' +
-        '<pre>http://nintex.herokuapp.com/write			create a url record</pre>' +
-        '<pre>http://nintex.herokuapp.com/findKeys?url=url 		find all the keys for a particular url</pre>' +
-        '<pre>http://nintex.herokuapp.com/configuration		show current host configuration</pre><br>' +
+        '<pre>http://nintex.herokuapp.com/reduce			read/write a reduced url record</pre>' +
+        '<pre>http://nintex.herokuapp.com/findKeys 			find all the keys for a particular url</pre>' +
+        '<pre>http://nintex.herokuapp.com/config			show current host configuration</pre><br>' +
 
         'Examples<br><br>' +
 
         '<pre>http://nintex.herokuapp.com/url/myKey</pre>' +
         '<pre>http://nintex.herokuapp.com/seed</pre>' +
-        '<pre>http://nintex.herokuapp.com/read?key=myKey</pre>' +
-        '<pre>http://nintex.herokuapp.com/write?key=myKey&url=www.google.com</pre>' +
-        '<pre>http://nintex.herokuapp.com/findKeys?url=www.google.com</pre>';
+        '<pre>http://nintex.herokuapp.com/reduce/myKey</pre>' +
+        '<pre>http://nintex.herokuapp.com/reduce/myKey?url=www.google.com</pre>' +
+        '<pre>http://nintex.herokuapp.com/findKeys/bing</pre>';
 
     res.send(html);
 });

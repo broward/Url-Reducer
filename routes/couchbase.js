@@ -91,6 +91,8 @@ var seedBucket = cluster.openBucket(config.seedbase.bucket, function(err) {
 var keyIncrementer = function(callback) {
     var nextUrl = bases.fromBase32(currentUrl);
     nextUrl = parseFloat(nextUrl) + 1;
+
+    // save latest generated url in memory
     currentUrl = bases.toBase32(nextUrl + '');
     callback(config.app.clusterid + currentUrl);
 
@@ -167,8 +169,8 @@ var seedWrite = function(value, callback) {
 /**
  *  REST call to read a entry from couchbase
  **/
-app.get(config.rest.read, function(req, res, next) {
-    urlRead(req.query.key, function(err, val) {
+app.get(config.rest.reduce, function(req, res, next) {
+    urlRead(req.params.key, function(err, val) {
         if (err) {
             res.send(err);
         } else {
@@ -200,8 +202,8 @@ var urlRead = function(key, callback) {
 /**
  *  REST call to write entry to couchbase
  **/
-app.get(config.rest.write, function(req, res, next) {
-    urlWrite(req.query.key, req.query.url, function(err, val) {
+app.post(config.rest.reduce, function(req, res, next) {
+    urlWrite(req.params.key, req.query.url, function(err, val) {
         if (err) {
             res.send(err);
         } else {
@@ -281,7 +283,7 @@ app.get(config.rest.url, function(req, res, next) {
  **/
 app.get(config.rest.findKeys, function(req, res, next) {
 
-    findKeys(req.query.url, function(err, val) {
+    findKeys(req.params.key, function(err, val) {
         if (err) {
             res.send(err);
         } else {

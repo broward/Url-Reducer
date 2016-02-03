@@ -154,19 +154,19 @@ describe("NUR Test Suite", function() {
 
         it("Test Read API", function(done) {
             supertest(cb)
-                .get('/read?key=' + reduceUrl)
+                .get(config.rest.reduce.substring(0, 7) + '/' + reduceUrl)
                 .expect(200, done);
         });
 
         it("Test Write API", function(done) {
             supertest(cb)
-                .get('/write?url=' + reduceUrl)
+                .post(config.rest.reduce.substring(0, 7) + '/' + reduceUrl + '?url=' + redirectUrl)
                 .expect(200, done);
         });
 
         it("Test FindKeys API", function(done) {
             supertest(cb)
-                .get('/findKeys?url=bing')
+                .get(config.rest.findKeys.substring(0, 9) + '/' + redirectUrl)
                 .expect(200, done);
         });
 
@@ -177,7 +177,6 @@ describe("NUR Test Suite", function() {
         });
 
         it("Test Url Redirect API", function(done) {
-            console.log(config.rest.url.substring(0, 5) + reduceUrl);
             supertest(cb)
                 .get(config.rest.url.substring(0, 5) + reduceUrl)
                 .expect(302, done);
