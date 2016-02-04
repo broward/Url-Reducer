@@ -14,10 +14,10 @@ and couchbase 4.0 running on amazon
 
 REST calls -
 
-http://nintex.herokuapp.com/url   			to execute a reduced url<br>
-http://nintex.herokuapp.com/seed  			to create/advance the next generated url<br>
-http://nintex.herokuapp.com/reduce/:key    		read/write a reduced url record<br>
-http://nintex.herokuapp.com/findKeys/:url	find all the keys for a particular url<br>
+http://nintex.herokuapp.com/url   				to execute a reduced url<br>
+http://nintex.herokuapp.com/seed  				to create/advance the next generated url<br>
+http://nintex.herokuapp.com/reduce/:key    			read/write a reduced url record<br>
+http://nintex.herokuapp.com/findKeys/:url		find all the keys for a particular url<br>
 http://nintex.herokuapp.com/config<br>
 
 Examples
