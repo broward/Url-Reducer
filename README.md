@@ -4,29 +4,29 @@
 
 This app uses node.js running on heroku
 
--- http://nintex.herokuapp.com
+	<pre>http://nintex.herokuapp.com</pre>
 
 
 and couchbase 4.0 running on amazon 
 
--- http://ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091
+	<pre>http://ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091</pre>
 
 
 REST calls -
 
-<pre>http://nintex.herokuapp.com/url			to execute a reduced url</pre>
-http://nintex.herokuapp.com/seed  				to create/advance the next generated url<br>
-http://nintex.herokuapp.com/reduce/:key    			read/write a reduced url record<br>
-http://nintex.herokuapp.com/findKeys/:url		find all the keys for a particular url<br>
-http://nintex.herokuapp.com/config<br>
+<pre>http://nintex.herokuapp.com/url				to execute a reduced url</pre>
+<pre>http://nintex.herokuapp.com/seed				to create/advance the next generated url</pre>
+<pre>http://nintex.herokuapp.com/reduce/:key 		read/write a reduced url record</pre>
+<pre>http://nintex.herokuapp.com/findKeys/:url		find all the keys for a particular url</pre>
+<pre>http://nintex.herokuapp.com/config</pre>
 
 Examples
 
-http://nintex.herokuapp.com/url/myKey<br>
-http://nintex.herokuapp.com/seed<br>
-http://nintex.herokuapp.com/reduce/myKey<br>
-http://nintex.herokuapp.com/reduce/myKey&url=www.google.com<br>
-http://nintex.herokuapp.com/findKeys/bing<br>
+<pre>http://nintex.herokuapp.com/url/myKey</pre>
+<pre>http://nintex.herokuapp.com/seed</pre>
+<pre>http://nintex.herokuapp.com/reduce/myKey</pre>
+<pre>http://nintex.herokuapp.com/reduce/myKey&url=www.google.com</pre>
+<pre>http://nintex.herokuapp.com/findKeys/bing</pre>
 
 Testing - run "npm test" in root directory
 
