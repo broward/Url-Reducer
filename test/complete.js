@@ -57,6 +57,11 @@ describe("NUR Test Suite", function() {
             cb.methods.formatUrl(test);
             assert(true, test === 'http://');
 
+            // should add http://
+            test = '/' + redirectUrl;
+            cb.methods.formatUrl(test);
+            assert(true, test === 'http://' + redirectUrl);
+
             // should do nothing
             test = 'https://' + redirectUrl;
             cb.methods.formatUrl(test);
@@ -101,7 +106,16 @@ describe("NUR Test Suite", function() {
             });
         });
 
-        it("test read method", function(done) {
+        // test failure
+        it("test read method failure", function(done) {
+             cb.methods.urlRead(null, function(err, value) {
+                assert(true, err !== null);
+                done();
+            });
+        });
+
+        // test success
+        it("test read method success", function(done) {
             cb.methods.urlRead(reduceUrl, function(err, value) {
                 assert(true, err === null);
                 should.exist(value);
@@ -110,6 +124,7 @@ describe("NUR Test Suite", function() {
             });
         });
 
+        // test success
         it("test keyIncrementer", function(done) {
             cb.methods.keyIncrementer(function(key) {
                 // should return a key
