@@ -153,20 +153,22 @@ describe("NUR Test Suite", function() {
         });
 
         it("Test Read API", function(done) {
+        	var params = { "key" : reduceUrl};
             supertest(cb)
-                .get(config.rest.reduce.substring(0, 7) + '/' + reduceUrl)
+                .get(config.rest.reduce.substring(0, 8) + params)
                 .expect(200, done);
-        });
+        }); 
 
         it("Test Write API", function(done) {
+        	var params = { "key" : reduceUrl, "url" : redirectUrl};
             supertest(cb)
-                .post(config.rest.reduce.substring(0, 7) + '/' + reduceUrl + '?url=' + redirectUrl)
+                .post(config.rest.reduce.substring(0, 8) + params)
                 .expect(200, done);
         });
 
         it("Test FindKeys API", function(done) {
             supertest(cb)
-                .get(config.rest.findKeys.substring(0, 9) + '/' + redirectUrl)
+                .get(config.rest.findKeys.substring(0, 10) + redirectUrl)
                 .expect(200, done);
         });
 

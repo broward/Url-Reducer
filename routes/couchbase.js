@@ -203,7 +203,7 @@ var urlRead = function(key, callback) {
  *  REST call to write entry to couchbase
  **/
 app.post(config.rest.reduce, function(req, res, next) {
-    urlWrite(req.params.key, req.query.url, function(err, val) {
+    urlWrite(req.params.key, req.params.url, function(err, val) {
         if (err) {
             res.send(err);
         } else {
