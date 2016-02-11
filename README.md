@@ -4,12 +4,12 @@
 
 This app uses node.js running on heroku
 
-	<pre>http://couchbase-ex.herokuapp.com</pre>
+	http://couchbase-ex.herokuapp.com
 
 
 and couchbase 4.0 running on amazon 
 
-	<pre>http://ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091</pre>
+	http://ec2-54-191-226-92.us-west-2.compute.amazonaws.com:8091
 
 
 REST calls -
