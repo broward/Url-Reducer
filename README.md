@@ -1,6 +1,7 @@
 # url reducer
 
 
+[URL Reducer Design](https://broward.ghost.io/2016/02/03/code-exercise-2/)
 
 This app uses node.js running on heroku
 
